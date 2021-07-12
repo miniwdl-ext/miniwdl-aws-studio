@@ -1,7 +1,7 @@
 
 # miniwdl + GWFCore + SageMaker Studio
 
-This repository is a recipe for deploying **miniwdl_aws** (TODO: link) and [GWFCore](https://github.com/aws-samples/aws-genomics-workflows) to use within [Amazon SageMaker Studio](https://aws.amazon.com/sagemaker/studio/). You can use Studio's terminal to launch `miniwdl run` workflows on AWS Batch, along with its filesystem browser to manage the inputs and outputs on EFS.
+This repository is a recipe for deploying **[miniwdl-aws](https://github.com/miniwdl-ext/miniwdl-aws)** and [GWFCore](https://github.com/aws-samples/aws-genomics-workflows) to use within [Amazon SageMaker Studio](https://aws.amazon.com/sagemaker/studio/), a web IDE with a terminal and filesystem browser. You can use the terminal to operate `miniwdl run` against GWFCore's AWS Batch stack, the filesystem browser to manage the inputs and outputs on EFS, and the Jupyter notebooks to further analyze the outputs.
 
 ## CDK boilerplate
 

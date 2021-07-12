@@ -7,9 +7,9 @@ with open("README.md") as fp:
 CDK_MIN_VERSION = "1.110.0"
 
 setuptools.setup(
-    name="miniwdl_gwfcore_studio",
+    name="miniwdl-aws-studio",
     version="0.0.1",
-    description="CDK app to add miniwdl+GWFCore to existing SageMaker Studio",
+    description="AWS CDK app to add miniwdl+GWFCore to existing SageMaker Studio",
     long_description=long_description,
     long_description_content_type="text/markdown",
     author="Wid L. Hacker",

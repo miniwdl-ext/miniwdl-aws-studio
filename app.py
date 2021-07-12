@@ -66,15 +66,11 @@ for k, v in detected.items():
 
 # Add necessary policies to the Studio ExecutionRole. We don't do this through CDK because of:
 #   https://github.com/aws/aws-cdk/blob/486f2e5518ab5abb69a3e3986e4f3581aa42d15b/packages/%40aws-cdk/aws-iam/lib/role.ts#L225-L227
-studio_execution_role_arn = user_profile_desc.get("UserSettings", {}).get(
-    "ExecutionRole", ""
-)
+studio_execution_role_arn = user_profile_desc.get("UserSettings", {}).get("ExecutionRole", "")
 assert studio_execution_role_arn.startswith(
     "arn:aws:iam::"
 ), "Failed to detect SageMaker Studio ExecutionRole ARN"
-studio_execution_role_name = studio_execution_role_arn[
-    studio_execution_role_arn.rindex("/") + 1 :
-]
+studio_execution_role_name = studio_execution_role_arn[studio_execution_role_arn.rindex("/") + 1 :]
 iam = boto3.client("iam", **client_opts)
 
 for policy_arn in (

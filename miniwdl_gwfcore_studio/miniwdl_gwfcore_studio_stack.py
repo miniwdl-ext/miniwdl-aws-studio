@@ -8,7 +8,6 @@ from aws_cdk import (
     aws_ec2 as cdk_ec2,
     aws_iam as cdk_iam,
     aws_efs as cdk_efs,
-    aws_lambda as cdk_lambda,
 )
 
 
@@ -34,14 +33,10 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
 
         # Detect VPC subnets
         vpc = cdk_ec2.Vpc.from_lookup(self, "Vpc", vpc_id=vpc_id)
-        subnet_ids = vpc.select_subnets(
-            subnet_type=cdk_ec2.SubnetType.PUBLIC
-        ).subnet_ids
+        subnet_ids = vpc.select_subnets(subnet_type=cdk_ec2.SubnetType.PUBLIC).subnet_ids
 
         # Deploy gwfcore sub-stacks
-        batch_sg = self._gwfcore(
-            gwfcore_version, vpc_id, subnet_ids, studio_efs_id, env
-        )
+        batch_sg = self._gwfcore(gwfcore_version, vpc_id, subnet_ids, studio_efs_id, env)
 
         # Modify Studio EFS security group to allow access from gwfcore's Batch compute environment
         studio_efs_sg = cdk_ec2.SecurityGroup.from_security_group_id(
@@ -65,6 +60,7 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
             posix_user=cdk_efs.PosixUser(uid=studio_efs_uid, gid=studio_efs_uid),
             path="/" + studio_efs_uid + "/miniwdl",
         )
+        assert fsap
 
     def __del__(self):
         # clean up temp dir
@@ -110,9 +106,7 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
         # Add EFS client access policy to the Batch instance role
         included_gwfcore_iam_stack = cfn_gwfcore.get_nested_stack("IamStack")
         gwfcore_iam_template = included_gwfcore_iam_stack.included_template
-        gwfcore_batch_instance_role = gwfcore_iam_template.get_resource(
-            "BatchInstanceRole"
-        )
+        gwfcore_batch_instance_role = gwfcore_iam_template.get_resource("BatchInstanceRole")
         assert isinstance(gwfcore_batch_instance_role, cdk_iam.CfnRole)
         gwfcore_batch_instance_role.managed_policy_arns.append(
             cdk_iam.ManagedPolicy.from_aws_managed_policy_name(
@@ -121,9 +115,7 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
         )
 
         # Set a tag on the batch queue to help miniwdl_plugin_aws identify it as the default
-        gwfcore_batch_template = cfn_gwfcore.get_nested_stack(
-            "BatchStack"
-        ).included_template
+        gwfcore_batch_template = cfn_gwfcore.get_nested_stack("BatchStack").included_template
         cdk.Tags.of(gwfcore_batch_template.get_resource("DefaultQueue")).add(
             "MiniwdlStudioEfsId", studio_efs_id
         )
