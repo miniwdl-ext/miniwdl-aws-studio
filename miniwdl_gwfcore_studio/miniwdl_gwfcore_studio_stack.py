@@ -45,8 +45,8 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
         studio_efs_sg.add_ingress_rule(batch_sg, cdk_ec2.Port.tcp(2049))
 
         # Add EFS Access Point to help Batch jobs "see" the user's EFS directory in the same way
-        # SageMaker Studio presents it. Inside Studio, miniwdl_plugin_aws can detect this by
-        # filtering access points for the correct EFS ID, uid, and path.
+        # SageMaker Studio presents it. Inside Studio, miniwdl-aws can detect this by filtering
+        # access points for the correct EFS ID, uid, and path.
         studio_efs = cdk_efs.FileSystem.from_file_system_attributes(
             self,
             "StudioEFS",
@@ -114,7 +114,7 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
             ).managed_policy_arn
         )
 
-        # Set a tag on the batch queue to help miniwdl_plugin_aws identify it as the default
+        # Set a tag on the batch queue to help miniwdl-aws identify it as the default
         gwfcore_batch_template = cfn_gwfcore.get_nested_stack("BatchStack").included_template
         cdk.Tags.of(gwfcore_batch_template.get_resource("DefaultQueue")).add(
             "MiniwdlStudioEfsId", studio_efs_id
