@@ -1,7 +1,7 @@
 import setuptools
 from version import get_version
 
-MINIWDL_AWS_MIN_VERSION = "0.0.1"
+MINIWDL_AWS_MIN_VERSION = "0.0.2"
 CDK_MIN_VERSION = "1.110.0"
 
 with open("README.md") as fp:
