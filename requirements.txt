@@ -1,1 +1,5 @@
--e .
+boto3>=1.17
+aws-cdk.core>=1.110.0
+aws-cdk.aws_iam>=1.110.0
+aws-cdk.aws_efs>=1.110.0
+aws-cdk.cloudformation_include>=1.110.0
