@@ -8,7 +8,7 @@ from miniwdl_gwfcore_studio.miniwdl_gwfcore_studio_stack import (
     MiniwdlGwfcoreStudioStack,
 )
 
-DEFAULT_GWFCORE_VERSION = "v3.0.7"
+DEFAULT_GWFCORE_VERSION = "v3.1.0"
 gwfcore_version = os.environ.get("GWFCORE_VERSION", DEFAULT_GWFCORE_VERSION)
 
 env = {}

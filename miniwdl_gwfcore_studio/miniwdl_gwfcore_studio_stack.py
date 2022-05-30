@@ -99,7 +99,9 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
             parameters={
                 "VpcId": vpc_id,
                 "SubnetIds": subnet_ids,
+                "NumberOfSubnets": len(subnet_ids),
                 "S3BucketName": f"minwidl-gwfcore-studio-{env['account']}-{env['region']}",
+                "BatchComputeInstanceTypes": "m5,m5n,c5,c5n,r5,r5n,r5b",
             },
         )
 
