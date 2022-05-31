@@ -1,6 +1,7 @@
 import os
 import tempfile
 import boto3
+from typing import List
 from contextlib import ExitStack
 from aws_cdk import (
     core as cdk,
@@ -19,7 +20,7 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
         *,
         vpc_id: str,
         studio_efs_id: str,
-        studio_efs_uid: str,
+        studio_efs_uids: List[str],
         studio_efs_sg_id: str,
         gwfcore_version: str = "latest",
         env,
@@ -53,14 +54,14 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
             file_system_id=studio_efs_id,
             security_group=studio_efs_sg,
         )
-        fsap = cdk_efs.AccessPoint(
-            self,
-            "StudioFSAP",
-            file_system=studio_efs,
-            posix_user=cdk_efs.PosixUser(uid=studio_efs_uid, gid=studio_efs_uid),
-            path="/" + studio_efs_uid + "/miniwdl",
-        )
-        assert fsap
+        for uid in studio_efs_uids:
+            cdk_efs.AccessPoint(
+                self,
+                f"StudioFSAPuid{uid}x",
+                file_system=studio_efs,
+                posix_user=cdk_efs.PosixUser(uid=uid, gid=uid),
+                path=f"/{uid}/miniwdl",
+            )
 
     def __del__(self):
         # clean up temp dir
