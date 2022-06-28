@@ -32,6 +32,12 @@ if "region" in env:
     client_opts["region_name"] = env["region"]
 sagemaker = boto3.client("sagemaker", **client_opts)
 domain_desc = sagemaker.describe_domain(DomainId=studio_domain_id)
+if studio_user_profile_names == ["*"]:
+    lup = sagemaker.list_user_profiles(DomainIdEquals=studio_domain_id)
+    assert "NextToken" not in lup  # TODO paginate query for >100 users
+    studio_user_profile_names = [
+        up["UserProfileName"] for up in lup["UserProfiles"] if up["Status"] == "InService"
+    ]
 user_profile_desc = dict(
     (nm, sagemaker.describe_user_profile(DomainId=studio_domain_id, UserProfileName=nm))
     for nm in studio_user_profile_names

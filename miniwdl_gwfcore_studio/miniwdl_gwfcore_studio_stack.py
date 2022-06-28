@@ -60,7 +60,7 @@ class MiniwdlGwfcoreStudioStack(cdk.Stack):
                 f"StudioFSAPuid{uid}x",
                 file_system=studio_efs,
                 posix_user=cdk_efs.PosixUser(uid=uid, gid=uid),
-                path=f"/{uid}/miniwdl",
+                path=f"/{uid}",
             )
 
     def __del__(self):
