@@ -33,7 +33,7 @@ if "region" in env:
 sagemaker = boto3.client("sagemaker", **client_opts)
 domain_desc = sagemaker.describe_domain(DomainId=studio_domain_id)
 if studio_user_profile_names == ["*"]:
-    lup = sagemaker.list_user_profiles(DomainIdEquals=studio_domain_id)
+    lup = sagemaker.list_user_profiles(DomainIdEquals=studio_domain_id, MaxResults=100)
     assert "NextToken" not in lup  # TODO paginate query for >100 users
     studio_user_profile_names = [
         up["UserProfileName"] for up in lup["UserProfiles"] if up["Status"] == "InService"
